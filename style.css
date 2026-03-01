@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #070707;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden; /* Lock scroll for full screen hero */
+}
+
+.hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+.layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.text-back {
+    z-index: 1;
+}
+
+.photo-layer {
+    z-index: 2;
+}
+
+.text-front {
+    z-index: 3;
+}
+
+.anim-text {
+    font-size: 15vw;
+    font-weight: 900;
+    line-height: 0.85;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    display: flex;
+    white-space: pre;
+}
+
+/* Positioning */
+.text-back .anim-text {
+    transform: translateY(-22vh);
+    color: rgba(255, 255, 255, 0.4); /* Brighter back text for better visibility */
+}
+
+.text-front .anim-text {
+    transform: translateY(22vh);
+    color: #ffffff; /* Bright front text */
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Depth shadow over the image */
+}
+
+/* Optional outline style for front text if you prefer strict minimalism */
+/* .text-front .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px #ffffff;
+} */
+
+.photo-wrapper {
+    width: 45vw;
+    max-width: 600px;
+    height: 80vh;
+    max-height: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align to bottom so image doesn't float weirdly if portrait */
+}
+
+.anim-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Prevents cropping the hairstyle */
+    object-position: center bottom;
+    opacity: 0;
+    transform: scale(1.15);
+    /* Shadow applied directly to the image shape, not a box */
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    /* Fade out the bottom so it doesn't look cut off */
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+/* Animations */
+.char-wrap {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.char {
+    display: inline-block;
+    transform: translateY(110%);
+    opacity: 0;
+}
+
+/* Triggers when JS adds .loaded class */
+.hero.loaded .char {
+    animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero.loaded .anim-photo {
+    animation: fadeScale 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(110%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeScale {
+    0% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .anim-text {
+        font-size: 22vw;
+    }
+    .photo-wrapper {
+        width: 75vw;
+        height: 55vh;
+    }
+    .text-back .anim-text {
+        transform: translateY(-25vh);
+    }
+    .text-front .anim-text {
+        transform: translateY(25vh);
+    }
+}
